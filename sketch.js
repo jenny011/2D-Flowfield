@@ -2,7 +2,7 @@
 
 let vehicles = [];
 let rows, cols;
-let RESOLUTION = 30;
+// let RESOLUTION = 30;
 let angles_avoid = [],angles_field=[],angles_changed = [];
 let obstacle;
 let pattern = 0;
@@ -11,20 +11,22 @@ let params = {
   fluctSpeed: 0.5,
   randomness:0.015,
   interact:false,
+  RESOLUTION: 20,
 }
 
 let gui = new dat.GUI();
 gui.add(params,'showField');
 gui.add(params,'fluctSpeed',0.1,1).listen();
 gui.add(params,'randomness',0.001,0.1).listen();
+gui.add(params,'RESOLUTION',20,60,10).listen();
 gui.add(params,'interact');
 
 function setup() {
   createCanvas(window.innerWidth,window.innerHeight);
   background(0);
 
-  rows = ceil(width / RESOLUTION);
-  cols = ceil(height / RESOLUTION);
+  rows = ceil(width / params.RESOLUTION);
+  cols = ceil(height / params.RESOLUTION);
 
   obstacle = new Obstacle(width/2,height/2,30);
   for(let i=0;i<2000;i++){
@@ -55,8 +57,8 @@ function draw() {
   for (let c = 0; c < cols; c++) {
     for (let r = 0; r < rows; r++) {
       let index = r + c * rows;
-      let x = r * RESOLUTION;
-      let y = c * RESOLUTION;
+      let x = r * params.RESOLUTION;
+      let y = c * params.RESOLUTION;
 
       //<-------Pattern------->
       let freqX = (x+params.fluctSpeed*frameCount)*params.randomness;
@@ -119,10 +121,10 @@ function draw() {
   let c;
   for (let i = 0; i < vehicles.length; i++) {
     let v = vehicles[i];
-    let r = floor(v.pos.x / RESOLUTION);
-    let c = floor(v.pos.y / RESOLUTION);
+    let r = floor(v.pos.x / params.RESOLUTION);
+    let c = floor(v.pos.y / params.RESOLUTION);
     let angleIndex = r + c * rows;
-    
+
     //<-----predict collision = angleBetween---->
     let distance = new p5.Vector.sub(obstacle.pos,v.pos);
     let angleVector = new p5.Vector.fromAngle(angles_field[angleIndex]);
@@ -161,37 +163,35 @@ function draw() {
 
 //**********drawField************
 function showField(x,y,angleA,angleF,angleC,index){
-  // let vector = p5.Vector.fromAngle(angleA);
-  // vector.mult(RESOLUTION/2);
   push();
   translate(x,y);
   noFill();
   stroke(200,10);
-  rect(0, 0, RESOLUTION, RESOLUTION);
+  rect(0, 0, params.RESOLUTION, params.RESOLUTION);
   pop();
   //<---FlowField(with/out mouse)--->
   push();
   translate(x,y);
   stroke(255,0,0,20);
-  translate(RESOLUTION/2,RESOLUTION/2);
+  translate(params.RESOLUTION/2,params.RESOLUTION/2);
   rotate(angleA);
-  line(0, 0, RESOLUTION/2, 0);
+  line(0, 0, params.RESOLUTION/2, 0);
   pop();
   //<---AvoidField--->
   push();
   translate(x,y);
   stroke(255,255,0,20);
-  translate(RESOLUTION/2,RESOLUTION/2);
+  translate(params.RESOLUTION/2,params.RESOLUTION/2);
   rotate(angleF);
-  line(0, 0, RESOLUTION/2, 0);
+  line(0, 0, params.RESOLUTION/2, 0);
   pop();
   //<---ChangedField--->
   push();
   translate(x,y);
   stroke(0,255,255,20);
-  translate(RESOLUTION/2,RESOLUTION/2);
+  translate(params.RESOLUTION/2,params.RESOLUTION/2);
   rotate(angleC);
-  line(0, 0, RESOLUTION/2, 0);
+  line(0, 0, params.RESOLUTION/2, 0);
   pop();
 
   // text(index, x+10, y+20);

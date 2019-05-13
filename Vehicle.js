@@ -25,17 +25,6 @@ class Vehicle {
     this.acc.add(force);
   }
 
-  seek(target) {
-    // desiredVel
-    let desiredVel = p5.Vector.sub(target, this.pos);
-    desiredVel.setMag(this.maxSpeed);
-    // steeringForce
-    let steerForce = p5.Vector.sub(desiredVel, this.vel);
-    steerForce.limit(this.maxSteerForce);
-    // apply
-    this.applyForce(steerForce);
-  }
-
   avoidObstacle(obstacle){
     let desired = p5.Vector.sub(obstacle.pos, this.pos);
     let distance = desired.mag();
