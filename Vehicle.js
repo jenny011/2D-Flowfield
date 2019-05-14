@@ -6,9 +6,9 @@ class Vehicle {
     this.avoid = false;
     this.acc = createVector();
     this.angle = 0;
-    this.maxSpeed = 1.5;
-    this.maxSteerForce = 1.2;
-    this.maxSteer = 1.2;
+    this.maxSpeed = 2;
+    this.maxSteerForce = 1.7;
+    this.maxSteer = 1.7;
     this.avoidArea = 15;
     this.color = color;
   }
@@ -76,12 +76,9 @@ class Vehicle {
     push();
     translate(this.pos.x, this.pos.y);
     rotate(this.angle);
-    //fill(0, 30);
     let sinVal = sin(frameCount * 0.1);
-    // let a = map(sinVal,-1,1,0,50);
-    stroke(red(this.color)*1.2/this.vel.mag(),green(this.color)*1.2/this.vel.mag(),blue(this.color)*1.2/this.vel.mag());
+    stroke(red(this.color)*1.25/this.vel.mag(),green(this.color)*1.25/this.vel.mag(),blue(this.color)*1.25/this.vel.mag());
     point(0,0);
-    // ellipse(0,0,2,2);
     pop();
   }
 }
@@ -93,20 +90,9 @@ class Obstacle{
     this.rad = size;
     this.color = color(0,random(50,100),random(50,100));
   }
-  // repel(v) {
-  //   let vector = p5.Vector.sub(v.pos, this.pos);
-  //   let distance = vector.mag();
-  //   if (distance < this.brakeRad) {
-  //     vector.mult(0.1); //***
-  //     v.applyForce(vector);
-  //   }
-  // }
   display(){
     push();
     translate(this.pos.x,this.pos.y);
-    // noStroke();
-
-    // stroke(this.color);
     fill(red(this.color),green(this.color),blue(this.color),20);
     ellipse(0, 0, this.rad*2, this.rad*2);
     fill(red(this.color),green(this.color),blue(this.color),40);

@@ -13,8 +13,8 @@ let params = {
   randomness:0.015,
   interact:false,
   RESOLUTION: 10,
-  color: "#FFCCEE",
-  Ocolor:"#456789",
+  particleColor: "#FFFFFF",
+  obstacleColor:"#456789",
 }
 
 let gui = new dat.GUI();
@@ -23,8 +23,8 @@ gui.add(params,'fluctSpeed',0.1,1).listen();
 gui.add(params,'randomness',0.001,0.1).listen();
 gui.add(params,'RESOLUTION',20,60,10).listen();
 gui.add(params,'interact',false,true);
-gui.addColor(params, "color");
-gui.addColor(params, "Ocolor");
+gui.addColor(params, "particleColor");
+gui.addColor(params, "obstacleColor");
 
 function setup() {
   createCanvas(window.innerWidth,window.innerHeight);
@@ -52,7 +52,7 @@ function draw() {
   background(0,10);
   // blendMode(ADD);
   for(let i=0;i<obstacles.length;i++){
-    obstacles[i].color = params.Ocolor;
+    obstacles[i].color = params.obstacleColor;
   }
   vehicles.splice(0,10);
   for(let i=0;i<10;i++){
@@ -133,7 +133,7 @@ function draw() {
     v.flow(angles_field[angleIndex]);
 
     //<---vehicle--->
-    v.color = params.color;
+    v.color = params.particleColor;
     for(let i=0;i<obstacles.length;i++){
       v.avoidObstacle(obstacles[i]);
     }
@@ -172,7 +172,6 @@ function keyPressed(){
   }else{
     pattern = 0;
   }
-  obstacles.splice(0,3);
 }
 function mousePressed(){
   if((mouseX>width*0.65&&mouseY<height*0.34)==false){
