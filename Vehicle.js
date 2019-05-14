@@ -8,7 +8,7 @@ class Vehicle {
     this.angle = 0;
     this.maxSpeed = 1.5;
     this.maxSteerForce = 1.2;
-    this.maxSteer = 0.01;
+    this.maxSteer = 1.2;
     this.avoidArea = 15;
     this.color = color;
   }
