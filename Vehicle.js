@@ -1,5 +1,5 @@
 class Vehicle {
-  constructor(x, y) {
+  constructor(x, y,color) {
     this.pos = createVector(x, y);
     this.vel = createVector();
     this.prevVel = this.vel;
@@ -7,9 +7,9 @@ class Vehicle {
     this.acc = createVector();
     this.angle = 0;
     this.maxSpeed = 1.5;
-    this.maxSteerForce = 0.1;
-    this.brakeRad = 30;
-    this.avoidArea = 20;
+    this.maxSteerForce = 1.2;
+    this.avoidArea = 15;
+    this.color = color;
   }
   update() {
     this.vel.add(this.acc);
@@ -29,20 +29,20 @@ class Vehicle {
     let desired = p5.Vector.sub(obstacle.pos, this.pos);
     let distance = desired.mag();
     if (distance < this.avoidArea + obstacle.rad) {
-      desired.normalize();
-      if (distance < this.brakeRad) {
-        desired.normalize();
-        // decrease
-        let mappedSpeed = map(distance, 0, obstacle.brakeRad, 0, this.maxSpeed)
-        desired.mult(-mappedSpeed);
-      } else {
-        desired.mult(-this.maxSpeed);
-      }
-      // steering force
+      let s = map(distance, 0, this.avoidArea + obstacle.rad, -5, -2);
+      desired.mult(s*100/distance);
       let steer = p5.Vector.sub(desired, this.vel);
       steer.limit(this.maxSteerForce);
-      // apply
       this.applyForce(steer);
+      // desired.normalize();
+      // // decrease
+      // let mappedSpeed = map(distance, 0, obstacle.brakeRad,this.maxSpeed, 0)
+      // desired.mult(-mappedSpeed);
+      // // steering force
+      // let steer = p5.Vector.sub(desired, this.vel);
+      // steer.limit(this.maxSteerForce);
+      // // apply
+      // this.applyForce(steer);
     }
   }
 
@@ -60,25 +60,25 @@ class Vehicle {
   reappear() {
     if (this.pos.x < 0||this.pos.x > width||this.pos.y < 0||this.pos.y > height) {
       let x=random(width),y=random(height);
-      while((x<=obstacle.pos.x+obstacle.rad*3)&&(x>=obstacle.pos.x-obstacle.rad*4)&&(y<=obstacle.pos.y+obstacle.rad*3)&&(y>=obstacle.pos.y-obstacle.rad*3)){
-        x = random(width);
-        y = random(height);
+      for(let j=0;j<obstacles.length;j++){
+        while((x<=obstacles[j].pos.x+obstacles[j].rad*1.5)&&(x>=obstacles[j].pos.x-obstacles[j].rad*1.5)&&(y<=obstacles[j].pos.y+obstacles[j].rad*1.5)&&(y>=obstacles[j].pos.y-obstacles[j].rad*1.5)){
+            x = random(width);
+            y = random(height);
+        }
       }
       this.pos.x = x;
       this.pos.y = y;
     }
   }
 
-  display(color) {
+  display() {
     push();
     translate(this.pos.x, this.pos.y);
     rotate(this.angle);
     //fill(0, 30);
     let sinVal = sin(frameCount * 0.1);
     // let a = map(sinVal,-1,1,0,50);
-    stroke(color);
-    // stroke(150,200,255);
-    // triangle(0, 0, -15, 5, -15, -5);
+    stroke(red(this.color)*1.2/this.vel.mag(),green(this.color)*1.2/this.vel.mag(),blue(this.color)*1.2/this.vel.mag());
     point(0,0);
     // ellipse(0,0,2,2);
     pop();
@@ -91,16 +91,29 @@ class Obstacle{
     this.pos = createVector(x,y);
     this.rad = size;
     this.color = color(0,random(50,100),random(50,100));
-    this.brakeRad = this.rad*10;
   }
+  // repel(v) {
+  //   let vector = p5.Vector.sub(v.pos, this.pos);
+  //   let distance = vector.mag();
+  //   if (distance < this.brakeRad) {
+  //     vector.mult(0.1); //***
+  //     v.applyForce(vector);
+  //   }
+  // }
   display(){
     push();
     translate(this.pos.x,this.pos.y);
     // noStroke();
-    stroke(this.color);
-    fill(red(this.color),green(this.color),blue(this.color),30);
-    // rectMode(CENTER);
+
+    // stroke(this.color);
+    fill(red(this.color),green(this.color),blue(this.color),20);
     ellipse(0, 0, this.rad*2, this.rad*2);
+    fill(red(this.color),green(this.color),blue(this.color),40);
+    ellipse(0, 0, this.rad*1.75, this.rad*1.75);
+    fill(red(this.color),green(this.color),blue(this.color),50);
+    ellipse(0, 0, this.rad*1.4, this.rad*1.4);
+    fill(red(this.color),green(this.color),blue(this.color),255);
+    ellipse(0, 0, this.rad, this.rad);
     pop();
   }
 }
