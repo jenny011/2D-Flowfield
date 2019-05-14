@@ -12,7 +12,7 @@ let params = {
   fluctSpeed: 0.7,
   randomness:0.015,
   interact:false,
-  RESOLUTION: 20,
+  RESOLUTION: 10,
   color: "#FFCCEE",
   Ocolor:"#456789",
 }
@@ -76,28 +76,29 @@ function draw() {
       //<-------Pattern------->
       let freqX = (x+params.fluctSpeed*frameCount)*params.randomness;
       let freqY = (y+params.fluctSpeed*frameCount)*params.randomness;
-      let noiseVal, angle;
+      let value, angle;
+      let noiseVal = noise(freqX,freqY);
       if(pattern == 0){
-        noiseVal = sin(freqY);
-        angle = map(noiseVal, -1, 1, 0, PI/4);
+        value = sin(freqY);
+        angle = map(value, -1, 1, 0, PI/4);
       }else if(pattern == 1){
-        noiseVal = sin(freqY+freqX)+cos(freqX-freqY);
-        angle = map(noiseVal, -1, 1, PI/4, PI/2);
+        value = sin(freqY+freqX)+cos(freqX-freqY);
+        angle = map(value, -1, 1, PI/4, PI/2);
       }else if(pattern == 2){
-        noiseVal = sin(freqX)+cos(freqY);
-        angle = map(noiseVal, -1, 1, 0,PI*2);
+        value = sin(freqX)+cos(freqY);
+        angle = map(value, -1, 1, 0,PI*2);
       }else if(pattern == 3){
-        noiseVal = sin(Math.sqrt(freqX)+cos(Math.sqrt(freqY)));
-        angle = map(noiseVal, -1, 1, 0,PI*2);
+        value = sin(Math.sqrt(freqX)+cos(Math.sqrt(freqY)));
+        angle = map(value, -1, 1, 0,PI*2);
       }else if(pattern == 4){
-        noiseVal = cos(freqX/freqY)+cos(Math.pow(freqY,2));
-        angle = map(noiseVal, -1, 1, 0,PI/2);
+        value = cos(freqX/freqY)+cos(Math.pow(freqY,2));
+        angle = map(value, -1, 1, 0,PI/2);
       }else if(pattern == 5){
-        noiseVal = cos(Math.log(freqX))+cos(Math.log(freqY));
-        angle = map(noiseVal, -1, 1, 0,PI/2)*3;
+        value = cos(Math.log(freqX))+cos(Math.log(freqY));
+        angle = map(value, -1, 1, 0,PI/2)*3;
       }else {
-        noiseVal = cos(freqX+freqY);
-        angle = map(noiseVal, -1, 1, 0,PI*4);
+        value = cos(freqX+freqY)*noiseVal;
+        angle = map(value, -1, 1, 0,PI*4);
       }
 
       let vecGrid = createVector(x,y);
@@ -171,6 +172,7 @@ function keyPressed(){
   }else{
     pattern = 0;
   }
+  obstacles.splice(0,3);
 }
 function mousePressed(){
   if((mouseX>width*0.65&&mouseY<height*0.34)==false){
@@ -178,6 +180,7 @@ function mousePressed(){
       obstacles.push(new Obstacle(mouseX,mouseY,random(10,60)));
     }else{
       obstacles.splice(0,1);
+      obstacles.push(new Obstacle(mouseX,mouseY,random(10,60)));
     }
   }
 }
