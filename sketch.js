@@ -97,7 +97,7 @@ function draw() {
         value = cos(Math.log(freqX))+cos(Math.log(freqY));
         angle = map(value, -1, 1, 0,PI/2)*3;
       }else {
-        value = cos(freqX+freqY)*noiseVal;
+        value = cos(freqX+freqY);
         angle = map(value, -1, 1, 0,PI*4);
       }
 

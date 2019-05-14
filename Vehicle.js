@@ -8,6 +8,7 @@ class Vehicle {
     this.angle = 0;
     this.maxSpeed = 1.5;
     this.maxSteerForce = 1.2;
+    this.maxSteer = 0.01;
     this.avoidArea = 15;
     this.color = color;
   }
@@ -52,7 +53,7 @@ class Vehicle {
     desiredVel.setMag(this.maxSpeed);
     // steeringForce
     let steerForce = p5.Vector.sub(desiredVel, this.vel);
-    steerForce.limit(this.maxSteerForce);
+    steerForce.limit(this.maxSteer);
     // apply
     this.applyForce(steerForce);
   }
