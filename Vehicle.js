@@ -77,7 +77,7 @@ class Vehicle {
     translate(this.pos.x, this.pos.y);
     rotate(this.angle);
     let sinVal = sin(frameCount * 0.1);
-    stroke(red(this.color)*1.25/this.vel.mag(),green(this.color)*1.25/this.vel.mag(),blue(this.color)*1.25/this.vel.mag());
+    stroke(red(this.color)*1.5/this.vel.mag(),green(this.color)*1.5/this.vel.mag(),blue(this.color)*1.5/this.vel.mag());
     point(0,0);
     pop();
   }
